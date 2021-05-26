@@ -154,8 +154,6 @@ void gps_parser(std::string gps_line)
 //---------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
-    gps_parser(sample_text);
-
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
@@ -198,7 +196,7 @@ int main(int argc, char *argv[])
         printf("%s\n", buffer);
 
         std::string gps_line = buffer;
-
+        gps_parser(gps_line);
     }
 
     close(sockfd);
