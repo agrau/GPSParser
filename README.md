@@ -6,7 +6,7 @@ GPS Parser and net client socket
 # Prerequisites
 
 
-# Build GPSParser system
+# Build SpeedTracker system
 
 $ mkdir build
 $ cd build
