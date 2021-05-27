@@ -1,6 +1,6 @@
 # GPSParser
 
-GPS Parser and net client socket
+GPS Parser and server socket
 
 
 # Prerequisites
