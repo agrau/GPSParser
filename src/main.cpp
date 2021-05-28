@@ -194,9 +194,8 @@ int main(int argc, char *argv[])
 
         printf(" %s\n", buffer);
         std::string gps_line = buffer;
-        if (gps_line.find("GPGGA") == std::string::npos) // Is not a GPGGA line
-            continue;
-        gps_parser(gps_line);
+        if (gps_line.find("GPGGA") >= 0)
+            gps_parser(gps_line);
     }
 
     close(newsockfd);
