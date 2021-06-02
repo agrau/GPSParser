@@ -16,6 +16,8 @@
 
 std::string sample_text = "$GPGGA,175320.00,4748.634872,N,01053.770287,E,1,08,0.9,717.1,M,47.0,M,,*65";
 
+#include <fcntl.h>
+
 //---------------------------------------------------------------------------
 // GPGGAParser
 //---------------------------------------------------------------------------
@@ -140,6 +142,22 @@ void error(const char *msg)
 }
 
 //---------------------------------------------------------------------------
+// SetSocketBlockingEnabled
+// Returns true on success, or false if there was an error
+//---------------------------------------------------------------------------
+bool SetSocketBlockingEnabled(int fd, bool blocking)
+{
+   if (fd < 0)
+       return false;
+
+   int flags = fcntl(fd, F_GETFL, 0);
+   if (flags == -1) return false;
+   flags = blocking ? (flags & ~O_NONBLOCK) : (flags | O_NONBLOCK);
+
+   return (fcntl(fd, F_SETFL, flags) == 0) ? true : false;
+}
+
+//---------------------------------------------------------------------------
 // gps_parser
 //---------------------------------------------------------------------------
 void gps_parser(std::string gps_line)
@@ -184,6 +202,8 @@ int main(int argc, char *argv[])
                 &clilen);
     if (newsockfd < 0)
          error("ERROR on accept");
+
+    SetSocketBlockingEnabled(sockfd, false);
 
     while ( true )
     {
