@@ -203,19 +203,26 @@ int main(int argc, char *argv[])
     if (newsockfd < 0)
          error("ERROR on accept");
 
-    SetSocketBlockingEnabled(sockfd, false);
+    //SetSocketBlockingEnabled(sockfd, false);
 
     while ( true )
     {
         bzero(buffer, 256);
         n = read(newsockfd, buffer, 255);
-        if (n < 0)
+        if (n < 0) {
             error("ERROR reading from socket");
+            continue;
+        }
 
-        printf(" %s\n", buffer);
         std::string gps_line = buffer;
-        if (gps_line.find("GPGGA") >= 0)
+        if (gps_line.size() > 0)
+            std::cout << gps_line << '\n';
+        std::size_t found = gps_line.find("GPGGA");
+        if ((found != std::string::npos) && (found > 0))
+        {
+            std::cout << "Find a valid  GPGGA line" << '\n';
             gps_parser(gps_line);
+        }
     }
 
     close(newsockfd);
